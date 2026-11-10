@@ -1,0 +1,29 @@
+{% extends "predictor/base.html" %}
+{% load static %}
+{% block content %}
+<h1>Dengue Diagnosis – Decision Tree(django)</h1>
+<p class="note">Dataset: {{ m.n }} patients (Positive / Negative).</p>
+
+<h2>EDA Visualization</h2>
+<div class="grid">
+  <img src="{% static 'predictor/eda_class.png' %}">
+  <img src="{% static 'predictor/eda_numeric.png' %}">
+  <img src="{% static 'predictor/eda_symptoms.png' %}">
+  <img src="{% static 'predictor/eda_location.png' %}">
+</div>
+
+<h2>Classification Report</h2>
+<p>Train accuracy: {{ m.train_acc }} &nbsp; Test accuracy: {{ m.test_acc }}</p>
+<table>
+  <tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1</th><th>Support</th></tr>
+  {% for r in rows %}
+  <tr><td>{{ r.name }}</td><td>{{ r.precision }}</td><td>{{ r.recall }}</td><td>{{ r.f1 }}</td><td>{{ r.support }}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Confusion Matrix</h2>
+<img src="{% static 'predictor/confusion.png' %}" style="max-width:440px">
+
+<h2>Decision Tree</h2>
+<img src="{% static 'predictor/tree.png' %}">
+{% endblock %}

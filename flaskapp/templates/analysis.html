@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block c %}
+<h1>Dengue Diagnosis – Decision Tree(Flask)</h1>
+<p class="note">Dataset: {{m.n}} patients (Positive / Negative).</p>
+<h2>EDA Visualization</h2>
+<div class="grid"><img src="/static/eda_class.png"><img src="/static/eda_numeric.png"><img src="/static/eda_symptoms.png"><img src="/static/eda_location.png"></div>
+<h2>Classification Report</h2>
+<p>Train accuracy: {{'%.3f'|format(m.train_acc)}} &nbsp; Test accuracy: {{'%.3f'|format(m.test_acc)}}</p>
+<table><tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1</th><th>Support</th></tr>
+{% for k in classes + ['macro avg','weighted avg'] %}{% set r=m.report[k] %}
+<tr><td>{{k}}</td><td>{{'%.2f'|format(r.precision)}}</td><td>{{'%.2f'|format(r.recall)}}</td><td>{{'%.2f'|format(r['f1-score'])}}</td><td>{{r.support|int}}</td></tr>{% endfor %}</table>
+<h2>Confusion Matrix</h2><img src="/static/confusion.png" style="max-width:440px">
+<h2>Decision Tree</h2><img src="/static/tree.png">
+{% endblock %}

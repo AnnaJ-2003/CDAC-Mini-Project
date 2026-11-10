@@ -1,0 +1,39 @@
+{% extends "predictor/base.html" %}
+{% block content %}
+<h1>Predict Dengue</h1>
+{% if error %}<p class="err">{{ error }}</p>{% endif %}
+<form method="post">
+  {% csrf_token %}
+  <div class="f">
+    <label>Gender
+      <select name="Gender">
+        <option {% if f.Gender == 'Male' %}selected{% endif %}>Male</option>
+        <option {% if f.Gender == 'Female' %}selected{% endif %}>Female</option>
+      </select></label>
+    <label>Age <input type="number" name="Age" min="0" max="120" required value="{{ f.Age }}"></label>
+    <label>Platelet Count <input type="number" name="Platelet" min="0" required placeholder="e.g. 150000" value="{{ f.Platelet }}"></label>
+    <label>WBC <input type="number" name="WBC" min="0" required placeholder="e.g. 6000" value="{{ f.WBC }}"></label>
+    <label>Duration of Fever (days) <input type="number" name="Duration" min="0" max="30" required value="{{ f.Duration }}"></label>
+    <label>Location
+      <select name="Location">
+        {% for l in locations %}<option {% if f.Location == l %}selected{% endif %}>{{ l }}</option>{% endfor %}
+      </select></label>
+    {% for s in symptoms %}
+    <label>{{ s.label }}
+      <select name="{{ s.name }}">
+        <option value="0">No</option>
+        <option value="1" {% if s.value == "1" %}selected{% endif %}>Yes</option>
+      </select></label>
+    {% endfor %}
+  </div>
+  <button type="submit">Predict</button>
+</form>
+
+{% if result %}
+<div class="res">
+  <h2>{{ result.label }}</h2>
+  {% for name, pct in result.probs %}<div>{{ name }}: {{ pct }}%</div>{% endfor %}
+  <p class="note">This is a machine learning demo for academic use. It is not a medical diagnosis, so please consult a doctor.</p>
+</div>
+{% endif %}
+{% endblock %}
